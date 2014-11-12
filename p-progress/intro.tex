@@ -43,6 +43,24 @@ five community cards). The player with a better combination wins the pot. In the
 two equally ranked hands, the pot is split.
 \EIT
 
+\section{Literature review}
+Poker is one of the most popular card games played around the world.
+It has a rich story of study among game theorists, mathematicians, 
+and economists. Recently, there has been lots  of research into 
+developing strong programs for playing poker. In [1] authors introduced
+the Bayesian Poker Program (BPP), which uses a Bayesian network to model 
+poker hands and the opponent's playing behavior. In [2] an algorithm
+to compute the approximate jam/fold equilibrium strategies in tournaments 
+with three players has been developed. In a jam/fold strategy, all
+players can only fold or go all in (jam). This strategy known to be 
+the near-optimal in the two player tournaments. A heads-up no-limit Texas 
+Hold'em poker player called Tartanian, has been introduced in [3]. Tartanian
+uses a discretized betting model to reduce the size of the strategy space.
+It also, benefits from a card abstraction model to decrease the problem size.
+In [4] a poker program called Poki has been developed. Poki uses reinforcement 
+learning techniques to explore and construct statistical models for each opponent,
+ and exploit based on the observed patterns. 
+ 
 \section{Implementation}
 We use Python for our implementation. We have a class {\tt pokerCards} that consists
 two subclasses {\tt card} and {\tt deck}. Each {\tt card} has two parameters rank and suit.
