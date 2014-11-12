@@ -15,7 +15,7 @@ class Deck:
 	def __init__(self):
 		self.size = 52;
 		self.cards = cardsList;
-		self.imageName = {card:cards_dirName+card+'.png' for card in cardsList}
+		self.imageName = {card:cards_dirName+card+'.JPG' for card in cardsList}
 
 	def shuffle(self):
 		random.shuffle(self.cards);
