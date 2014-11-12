@@ -23,6 +23,7 @@ class Deck:
 	def pop(self):
 		card = self.cards[0];
 		del(self.cards[0]);
+		self.size -= 1;
 		return card;
 	
 	def peek(self):
@@ -34,4 +35,52 @@ class Deck:
 		print topCard
 		img = Image.open(self.imageName[topCard]);
 		img.show()		
+
+class Player:
+	def __init__(self,name,stack,params=None):
+		self.name = name;
+		self.stack = stack;
+		self.cards = [];
+		self.action = None;
+		self.isDealer = False;
+		self.amount = 0;
+
+class Hand:
+	def __init__(self, players, dealer):
+		self.deck = Deck();
+		self.deck.shuffle();
+		self.pot = 0;
+		self.dealer = dealer;
+		self.players = players;
+		self.state = "start"
+		self.flop = [];
+		self.turn = [];
+		self.river = [];
+		self.actionHist = [];
+	
+	def deal(self):
+		if self.state == "start":
+			self.players[0].cards.append(self.deck.pop());
+			self.players[1].cards.append(self.deck.pop());
+			self.players[0].cards.append(self.deck.pop());
+			self.players[1].cards.append(self.deck.pop());
+			self.state = "pre-flop";
 		
+		elif self.state == "pre-flop":	
+			self.deck.pop();
+			self.flop.append(self.deck.pop())
+			self.flop.append(self.deck.pop())
+			self.flop.append(self.deck.pop())
+			self.state = "pre-turn"
+		
+		elif self.state == "pre-turn":	
+			self.deck.pop();
+			self.turn.append(self.deck.pop())
+			self.state = "pre-river"
+
+		elif self.state == "pre-river":	
+			self.deck.pop();
+			self.river.append(self.deck.pop())
+			self.state = "done"
+	def update(self, player, action):
+		return	
