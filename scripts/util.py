@@ -54,8 +54,8 @@ class Hand:
 		self.players = players;
 		self.state = "start"
 		self.flop = [];
-		self.turn = [];
-		self.river = [];
+		self.turn = None;
+		self.river = None;
 		self.actionHist = [];
 	
 	def deal(self):
@@ -75,12 +75,14 @@ class Hand:
 		
 		elif self.state == "pre-turn":	
 			self.deck.pop();
-			self.turn.append(self.deck.pop())
+			self.turn = self.deck.pop()
 			self.state = "pre-river"
 
 		elif self.state == "pre-river":	
 			self.deck.pop();
-			self.river.append(self.deck.pop())
+			self.river = self.deck.pop()
 			self.state = "done"
+	def getState(self):
+		return self.state;
 	def update(self, player, action):
 		return	
