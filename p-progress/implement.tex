@@ -1,0 +1,26 @@
+ 
+\section{Implementation}
+We use Python for our implementation. We have a class {\tt pokerCards} that consists
+two subclasses {\tt card} and {\tt deck}. Each {\tt card} has two parameters rank and suit.
+Rank is a number in $\{2,3,\cdots,14\}$ (where 14 means Ace) and suit is a number in 
+$\{1,2,3,4\}$. The {\tt deck} has methods like pop and shuffle.
+
+We also have another class {\tt handEvaluator} that contains functions to evaluate poker hands.
+In particular, the method we use is inspired by [1]. The idea here is to assign scores to sets of
+five, six, or seven cards such that the hand with higher rank has a higher score and equally-ranked
+hands have the exact score. Specifically, {\tt handEvaluator} function receives the hole cards and  
+the board (with three to five cards) as its arguments and assigns a real number in $[0,1]$
+to the union of hole cards and the board. If {\tt handEvaluator(h1,b) > handEvaluator(h2,b)},
+it means that the rank of best five cards in {\tt h1$\cup$b} is higher than the best five cards
+in {\tt h2$\cup$b}. Notice that this doesn't mean the {\tt h1} does not have any chance to win.
+
+
+
+table UI shows hand
+hand 2player objects 
+player stack possible action role cards
+deck includes cards shuffle pop peek
+cards class
+
+handevaluator
+abstract cards
