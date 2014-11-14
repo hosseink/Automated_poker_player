@@ -22,7 +22,16 @@ beliefs. In this model, $B$ represents the dealt cards so far on the board, $S$ 
 story of the hand so far (\ie the actions in the previous states of the hand), and 
 $A$ is the opponent's action. Note that $B$, $S$, and $A$ are all observed by the
 agent, and she should use them to update her beliefs about hidden random variable
-$H$.
+$H$. The value of $F$, will be updated whenever the opponent's hole cards revealed
+at the end of a hand. 
+
+Given the updated beliefs about $F$ and $H$, the agent computes the expectation reward, 
+$\mathbb{E}(R)$ that she can get out of this hand. If $\mathbb{E}(R) <0$, she will
+fold any bet, otherwise she chooses to call, check, or even bet if the expected value 
+is above some threshold. So, whenever the agent sees an action from the opponent, she
+updates her beliefs, and act accordingly to maximases her reward. The agent can sometimes
+chooses to explore more, by being aggressive to get more information about the 
+opponent's hand instead of just exploiting her beliefs. 
  
 \begin{figure}[h!]
   	\centering
