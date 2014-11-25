@@ -16,10 +16,6 @@ if __name__ == "__main__":
 	delta_h = height/len(suits)
 	for i, suit in enumerate(suits):
 		for j, rank in enumerate(ranks):
-			new_image = image.crop((j * delta_w, i * delta_h, (j+1) * delta_w, (i+1) * delta_h));
-			new_image.save(directory + suit + rank + '.png');
-	'''for card in d.cards:
-		img_name = d.imageName[card];
-		im = Image.open(img_name);
-		im.thumbnail((im.size[0]/2, im.size[1]/2), Image.ANTIALIAS);
-		im.save(directory + card + ".JPG");'''
+			im = image.crop((j * delta_w, i * delta_h, (j+1) * delta_w, (i+1) * delta_h));
+			im.thumbnail((im.size[0]/2, im.size[1]/2), Image.ANTIALIAS);
+			im.save(directory + suit + rank + '.JPG');
