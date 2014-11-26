@@ -181,8 +181,10 @@ class Hand:
 		self.players[1-self.dealer].stack -= self.blind/2;
 		self.pot += 3*self.blind/2;
 
-		while True:
+		while True:	
 			self.deal();
+			self.table.update({"state": self.state, "hole_cards":[self.players[0].cards, self.players[1].cards], 
+					   "flop": self.flop, "turn":self.turn, "river":self.river})
 			self.printStatus();
 			print self.board;
 			winner = self.bid();
@@ -205,7 +207,7 @@ class Hand:
 			
 
 class heads_up_poker:
-	def __init__(self, players, table=None, dealer = None, num_of_hands = 10, blind = 2):
+	def __init__(self, players, table=None, dealer = None, num_of_hands = 1, blind = 2):
 		self.players = players;
 		self.table = None
 		self.dealer = 0;
@@ -214,15 +216,16 @@ class heads_up_poker:
 		self.blind = blind;
 	def play(self):
 		while self.num_of_hands_played < self.num_of_hands:
-			hand = Hand(self.players, self.dealer, self.blind, self.table);
+			table = Table();
+			hand = Hand(self.players, self.dealer, self.blind, table);
 			hand.play();
 			self.dealer = 1 - self.dealer;
 			self.num_of_hands_played += 1;
 		
 class CheckAgent:
-	def act(self, observations):
+	def act(self, observations, actionList):
 		return "check";
-	def update_blief(self, observations, actionList):
+	def update_blief(self, observations):
 		return
 
 class FoldAgent:
