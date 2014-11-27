@@ -4,7 +4,7 @@ from PIL import ImageTk, Image
 from util import *
 import os
 
-image_name = os.os.getcwd()+"/poker-table.JPG"
+image_name = os.getcwd()+"/poker-table.JPG"
 img = Image.open(image_name);
 w, h = img.size
 #canvas.pack(expand = YES, fill = BOTH)
