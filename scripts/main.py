@@ -59,17 +59,26 @@ class sahinaz:
             agent_cards = [cardstoC[c] for c in observation['player'].cards]
             agent_score = HandEvaluator.evaluate_hand(agent_cards,board)
             confidence = 1 - float(sum(np.greater(scores,agent_score)))/len(scores)
-            if (confidence > .75) and ("bet" in actionList):
-                action =  "bet"
+            if (confidence > .7):
+                if ("bet" in actionList):
+                    action =  "bet"
+                else:
+                    action = "call"
             elif "check" in actionList:
                 action =  "check"
             else:
-                action =  "fold"
+                if confidence > .5:
+                    action =  "call"
+                else:
+                    action = "fold"
         else:
             if "check" in actionList:
                 action =  "check"
             else:
                 action =  "call"
+        if np.random.rand() < .2:
+            print "I'm bluffing: bet"
+            return "bet"
         print action
         return action
 
