@@ -77,9 +77,13 @@ class sahinaz:
             else:
                 action =  "call"
         if np.random.rand() < .2:
+	    print "--------------------"
             print "I'm bluffing: bet"
+	    print "--------------------"
             return "bet"
+	print "--------------------"
         print action
+	print "--------------------"
         return action
 
 class humanAgent:
@@ -90,8 +94,9 @@ class humanAgent:
 		return action
 
 if __name__ == "__main__":
-	players = [Player('Hossein', 100, agent = sahinaz()), Player('Reza', 100, agent = humanAgent())];
-	heads_up = heads_up_poker(players, num_of_hands = 50);
+	players = [Player('Hossein', 100, agent = sahinaz()), Player('Reza', 100, agent = sahinaz())];
+	table = Table();
+	heads_up = heads_up_poker(players, num_of_hands = 2, table = table);
 	heads_up.play();
 
 	print players[0].name + "'s stack is " + str(players[0].stack) + "(won " + str(players[0].num_of_hands_won)+ "hands)"

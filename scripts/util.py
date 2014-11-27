@@ -183,8 +183,9 @@ class Hand:
 
 		while True:	
 			self.deal();
-			self.table.update({"state": self.state, "hole_cards":[self.players[0].cards, self.players[1].cards], 
-					   "flop": self.flop, "turn":self.turn, "river":self.river})
+			if self.table!= None:
+				self.table.update({"state": self.state, "hole_cards":[self.players[0].cards, self.players[1].cards], 
+						   "flop": self.flop, "turn":self.turn, "river":self.river})
 			self.printStatus();
 			print self.board;
 			winner = self.bid();
@@ -209,7 +210,7 @@ class Hand:
 class heads_up_poker:
 	def __init__(self, players, table=None, dealer = None, num_of_hands = 1, blind = 2):
 		self.players = players;
-		self.table = Table()
+		self.table = table
 		self.dealer = 0;
 		self.num_of_hands = num_of_hands;
 		self.num_of_hands_played = 0;
@@ -237,11 +238,15 @@ class HumanAgent:
 		#print observations
 		print actionList
 		action = raw_input(observations['player'].name+", enter your action: ")
+		while action not in actionList:
+			print "Invalid action\n"
+			action = raw_input(observations['player'].name+", enter your action: ")
 		return action
  
 if __name__ == "__main__":
 	players = [Player('Hossein', 100, agent = HumanAgent()), Player('Reza', 100, agent = HumanAgent())];
-	heads_up = heads_up_poker(players, num_of_hands = 5);
+	table = Table()
+	heads_up = heads_up_poker(players, num_of_hands = 5, table = table);
 	heads_up.play();
 	
 	print players[0].name + "'s stack is " + str(players[0].stack) + "(won " + str(players[0].num_of_hands_won)+ "hands)"	
