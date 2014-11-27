@@ -9,7 +9,7 @@ from pokereval.hand_evaluator import HandEvaluator
 from table import *
 
 suits = ['S', 'H', 'D', 'C'];
-ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J','Q', 'K', 'A']; # 10 is missed (should be fixed) 
+ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J','Q', 'K', 'A']; # 10 is missed (should be fixed)
 cardsList = [];
 imageName = {};
 cardstoC = {};
@@ -30,22 +30,22 @@ class Deck:
 
 	def shuffle(self):
 		random.shuffle(self.cards);
-	
+
 	def pop(self):
 		card = self.cards[0];
 		del(self.cards[0]);
 		self.size -= 1;
 		return card;
-	
+
 	def peek(self):
 		card = self.cards[0];
 		return card;
-	
+
 	def showTop(self):
 		topCard = self.cards[0];
 		print topCard
 		img = Image.open(self.imageName[topCard]);
-		img.show()		
+		img.show()
 
 class Player:
 	def __init__(self,name,stack,params=None,opp_params = None, agent = None):
@@ -77,7 +77,7 @@ class Hand:
 		self.board = [];
 		self.table = table;
 		self.actionHist = {};
-	
+
 	def deal(self):
 		if self.state == "start":
 			self.players[0].cards.append(self.deck.pop());
@@ -87,27 +87,27 @@ class Hand:
 			print self.players[0].name + ":" ,  self.players[0].cards;
 			print self.players[1].name + ":" , self.players[1].cards;
 			self.state = "pre-flop";
-		
-		elif self.state == "pre-flop":	
+
+		elif self.state == "pre-flop":
 			self.deck.pop();
 			self.flop.append(self.deck.pop())
 			self.flop.append(self.deck.pop())
 			self.flop.append(self.deck.pop())
 			self.board.extend(self.flop)
 			self.state = "pre-turn"
-		
-		elif self.state == "pre-turn":	
+
+		elif self.state == "pre-turn":
 			self.deck.pop();
 			self.turn = self.deck.pop()
 			self.board.append(self.turn);
 			self.state = "pre-river"
 
-		elif self.state == "pre-river":	
+		elif self.state == "pre-river":
 			self.deck.pop();
 			self.river = self.deck.pop()
 			self.board.append(self.river)
 			self.state = "done"
-	
+
 	def getState(self):
 		return self.state;
 	def update(self, player, amount):
@@ -121,26 +121,26 @@ class Hand:
 			actionList = ["bet", "fold", "call"];
 		else:
 			actionList = ["bet", "fold", "check"];
-			
-		observation = {'player': self.players[player_turn], 'state': state, 
+
+		observation = {'player': self.players[player_turn], 'state': state,
 			       'board': self.board, 'pot': self.pot,  'History': self.actionHist};
 		action = self.players[player_turn].agent.act(observation, actionList);
-		
+
 		assert(action in actionList);
 
 		if action == "fold":
-			return 1 - player_turn; 
-			
+			return 1 - player_turn;
+
 		if state=="pre-flop":
 			self.update(self.players[player_turn], self.blind/2);
 
 		if action == "bet":
 			self.update(self.players[player_turn], self.blind);
 		self.actionHist[state].append((player_turn, action))
-		
-			
+
+
 		while True:
-			self.printStatus()	
+			self.printStatus()
 			player_turn = 1 - player_turn;
 			new_actionList = [];
 			if action == "call":
@@ -149,8 +149,8 @@ class Hand:
 				new_actionList = ["bet", "call", "fold"];
 			elif action == "check":
 				new_actionList = ["bet", "check", "fold"];
-				
-			observation = {'player': self.players[player_turn], 'state': state, 
+
+			observation = {'player': self.players[player_turn], 'state': state,
 				       'board': self.board, 'pot': self.pot, 'History': self.actionHist};
 			new_action = self.players[player_turn].agent.act(observation, new_actionList);
 			assert (new_action in new_actionList);
@@ -169,7 +169,7 @@ class Hand:
 			action = new_action;
 
 		if new_action == "fold":
-			return 1 - player_turn; 
+			return 1 - player_turn;
 		return -1;
 
 	def printStatus(self):
@@ -181,9 +181,9 @@ class Hand:
 		self.players[1-self.dealer].stack -= self.blind/2;
 		self.pot += 3*self.blind/2;
 
-		while True:	
+		while True:
 			self.deal();
-			self.table.update({"state": self.state, "hole_cards":[self.players[0].cards, self.players[1].cards], 
+			self.table.update({"state": self.state, "hole_cards":[self.players[0].cards, self.players[1].cards],
 					   "flop": self.flop, "turn":self.turn, "river":self.river})
 			self.printStatus();
 			print self.board;
@@ -204,7 +204,7 @@ class Hand:
 		self.players[winner].stack += self.pot;
 		self.players[winner].num_of_hands_won += 1;
 		return winner;
-			
+
 
 class heads_up_poker:
 	def __init__(self, players, table=None, dealer = None, num_of_hands = 1, blind = 2):
@@ -221,7 +221,7 @@ class heads_up_poker:
 			hand.play();
 			self.dealer = 1 - self.dealer;
 			self.num_of_hands_played += 1;
-		
+
 class CheckAgent:
 	def act(self, observations, actionList):
 		return "check";
@@ -238,11 +238,11 @@ class HumanAgent:
 		print actionList
 		action = raw_input(observations['player'].name+", enter your action: ")
 		return action
- 
+
 if __name__ == "__main__":
 	players = [Player('Hossein', 100, agent = HumanAgent()), Player('Reza', 100, agent = HumanAgent())];
 	heads_up = heads_up_poker(players, num_of_hands = 5);
 	heads_up.play();
-	
-	print players[0].name + "'s stack is " + str(players[0].stack) + "(won " + str(players[0].num_of_hands_won)+ "hands)"	
-	print players[1].name + "'s stack is " + str(players[1].stack) + "(won " + str(players[1].num_of_hands_won)+ "hands)"	
+
+	print players[0].name + "'s stack is " + str(players[0].stack) + "(won " + str(players[0].num_of_hands_won)+ "hands)"
+	print players[1].name + "'s stack is " + str(players[1].stack) + "(won " + str(players[1].num_of_hands_won)+ "hands)"
