@@ -7,6 +7,8 @@ import copy
 from pokereval.card import Card
 from pokereval.hand_evaluator import HandEvaluator
 from table import *
+import time
+from tkSimpleDialog import askstring
 
 suits = ['S', 'H', 'D', 'C'];
 ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J','Q', 'K', 'A']; # 10 is missed (should be fixed) 
@@ -57,6 +59,8 @@ class Player:
 		self.params = params;
 		self.opp_params = opp_params;
 		self.num_of_hands_won = 0;
+		self.action = None;
+		self.actionList = [];
 
 class Hand:
 	def __init__(self, players, dealer = 0, blind = 2, table = None):
@@ -125,7 +129,8 @@ class Hand:
 		observation = {'player': self.players[player_turn], 'state': state, 
 			       'board': self.board, 'pot': self.pot,  'History': self.actionHist};
 		action = self.players[player_turn].agent.act(observation, actionList);
-		
+		self.table.update_action(action, player_turn)	
+		self.table.update_action('', 1-player_turn)	
 		assert(action in actionList);
 
 		if action == "fold":
@@ -137,7 +142,7 @@ class Hand:
 		if action == "bet":
 			self.update(self.players[player_turn], self.blind);
 		self.actionHist[state].append((player_turn, action))
-		
+		self.updateTable()	
 			
 		while True:
 			self.printStatus()	
@@ -155,6 +160,9 @@ class Hand:
 			new_action = self.players[player_turn].agent.act(observation, new_actionList);
 			assert (new_action in new_actionList);
 
+			self.table.update_action(new_action, player_turn)	
+			self.table.update_action('', 1-player_turn)	
+
 			self.actionHist[state].append((player_turn, new_action))
 
 			if new_action == "call":
@@ -167,11 +175,18 @@ class Hand:
 			if new_action=="check" or new_action == "fold" or new_action == "call":
 				break;
 			action = new_action;
+			self.updateTable()	
 
 		if new_action == "fold":
 			return 1 - player_turn; 
 		return -1;
-
+	
+	def updateTable(self):
+		if self.table!= None:
+			self.table.update({"state": self.state, "hole_cards":[self.players[0].cards, self.players[1].cards], 
+					   "flop": self.flop, "turn":self.turn, "river":self.river, "pot": self.pot, 
+					   "stacks":[self.players[0].stack, self.players[1].stack]})
+		
 	def printStatus(self):
 		print self.players[0].name + "'s stack: " + str(self.players[0].stack)
 		print self.players[1].name + "'s stack: " + str(self.players[1].stack)
@@ -183,9 +198,9 @@ class Hand:
 
 		while True:	
 			self.deal();
-			if self.table!= None:
-				self.table.update({"state": self.state, "hole_cards":[self.players[0].cards, self.players[1].cards], 
-						   "flop": self.flop, "turn":self.turn, "river":self.river})
+			self.table.update_action('', 0);
+			self.table.update_action('', 1);
+			self.updateTable()
 			self.printStatus();
 			print self.board;
 			winner = self.bid();
@@ -208,10 +223,10 @@ class Hand:
 			
 
 class heads_up_poker:
-	def __init__(self, players, table=None, dealer = None, num_of_hands = 1, blind = 2):
+	def __init__(self, players, table=None, dealer = 0, num_of_hands = 1, blind = 2):
 		self.players = players;
 		self.table = table
-		self.dealer = 0;
+		self.dealer = dealer;
 		self.num_of_hands = num_of_hands;
 		self.num_of_hands_played = 0;
 		self.blind = blind;
@@ -224,16 +239,46 @@ class heads_up_poker:
 			self.num_of_hands_played += 1;
 		
 class CheckAgent:
+	def __init__(self):
+		self.fromTable = False
 	def act(self, observations, actionList):
-		return "check";
+		return actionList[0];
 	def update_blief(self, observations):
 		return
 
 class FoldAgent:
+	def __init__(self):
+		self.fromTable = False
 	def act(self, observations, actionList):
 		return "fold"
 
 class HumanAgent:
+	def __init__(self):
+		self.fromTable = True
+		self.actionList = []
+		self.action = None;
+	def act(self, observations, actionList):
+		#print observations
+		#print actionList
+		#action = raw_input(observations['player'].name+", enter your action: ")
+		#while action not in actionList:
+		#	print "Invalid action\n"
+		#	action = raw_input(observations['player'].name+", enter your action: ")
+		#return action
+		self.actionList = actionList;
+		print actionList
+		#action = raw_input(observations['player'].name+", enter your action: ")
+		action = askstring("Action","your action? (" + '/'.join([str(action) for action in actionList])+ ")")
+		while action not in actionList:
+			action = askstring("Action","invalid action! (" + '/'.join([str(action) for action in actionList])+ ")")
+		self.actionList = [];
+		return action
+
+class HumanAgent0:
+	def __init__(self):
+		self.fromTable = False
+		self.actionList = []
+		self.action = None;
 	def act(self, observations, actionList):
 		#print observations
 		print actionList
@@ -242,11 +287,14 @@ class HumanAgent:
 			print "Invalid action\n"
 			action = raw_input(observations['player'].name+", enter your action: ")
 		return action
+		
  
 if __name__ == "__main__":
-	players = [Player('Hossein', 100, agent = HumanAgent()), Player('Reza', 100, agent = HumanAgent())];
-	table = Table()
-	heads_up = heads_up_poker(players, num_of_hands = 5, table = table);
+	player1 =Player('Hossein', 100, agent = CheckAgent());
+	player2 =Player('Reza', 100, agent = HumanAgent());
+	players = [player1, player2] 
+	table = Table(players)
+	heads_up = heads_up_poker(players, num_of_hands = 5, table = table, dealer = 1);
 	heads_up.play();
 	
 	print players[0].name + "'s stack is " + str(players[0].stack) + "(won " + str(players[0].num_of_hands_won)+ "hands)"	

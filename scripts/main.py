@@ -94,9 +94,11 @@ class humanAgent:
 		return action
 
 if __name__ == "__main__":
-	players = [Player('Hossein', 100, agent = sahinaz()), Player('Reza', 100, agent = sahinaz())];
-	table = Table();
-	heads_up = heads_up_poker(players, num_of_hands = 2, table = table);
+	player1 = Player('Hossein', 100, agent = HumanAgent())
+	player2 = Player('Reza', 100, agent = sahinaz());
+	players = [player2, player1]
+	table = Table(players);
+	heads_up = heads_up_poker(players, num_of_hands = 5, table = table);
 	heads_up.play();
 
 	print players[0].name + "'s stack is " + str(players[0].stack) + "(won " + str(players[0].num_of_hands_won)+ "hands)"
