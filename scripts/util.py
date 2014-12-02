@@ -142,7 +142,7 @@ class Hand:
 		if action == "bet":
 			self.update(self.players[player_turn], self.blind);
 		self.actionHist[state].append((player_turn, action))
-		self.updateTable()	
+		self.updateTable(False)	
 			
 		while True:
 			self.printStatus()	
@@ -175,17 +175,17 @@ class Hand:
 			if new_action=="check" or new_action == "fold" or new_action == "call":
 				break;
 			action = new_action;
-			self.updateTable()	
+			self.updateTable(False)	
 
 		if new_action == "fold":
 			return 1 - player_turn; 
 		return -1;
 	
-	def updateTable(self):
+	def updateTable(self, show_cards = True):
 		if self.table!= None:
 			self.table.update({"state": self.state, "hole_cards":[self.players[0].cards, self.players[1].cards], 
 					   "flop": self.flop, "turn":self.turn, "river":self.river, "pot": self.pot, 
-					   "stacks":[self.players[0].stack, self.players[1].stack]})
+					   "stacks":[self.players[0].stack, self.players[1].stack], 'show_cards':show_cards})
 		
 	def printStatus(self):
 		print self.players[0].name + "'s stack: " + str(self.players[0].stack)
@@ -223,9 +223,9 @@ class Hand:
 			
 
 class heads_up_poker:
-	def __init__(self, players, table=None, dealer = 0, num_of_hands = 1, blind = 2):
+	def __init__(self, players, dealer = 0, num_of_hands = 1, blind = 2):
 		self.players = players;
-		self.table = table
+		self.table = Table(players)
 		self.dealer = dealer;
 		self.num_of_hands = num_of_hands;
 		self.num_of_hands_played = 0;
@@ -293,8 +293,8 @@ if __name__ == "__main__":
 	player1 =Player('Hossein', 100, agent = CheckAgent());
 	player2 =Player('Reza', 100, agent = HumanAgent());
 	players = [player1, player2] 
-	table = Table(players)
-	heads_up = heads_up_poker(players, num_of_hands = 5, table = table, dealer = 1);
+	#table = Table(players)
+	heads_up = heads_up_poker(players, num_of_hands = 5, dealer = 1);
 	heads_up.play();
 	
 	print players[0].name + "'s stack is " + str(players[0].stack) + "(won " + str(players[0].num_of_hands_won)+ "hands)"	

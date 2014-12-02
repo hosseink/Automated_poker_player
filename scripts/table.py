@@ -52,7 +52,7 @@ class Table():
 	
 		self.updateStacks();	
 
-		self.seats = [((570, 650), (685, 650)), ((570, 10), (685, 10))]
+		self.seats = [((570, 10), (685, 10)),((570, 650), (685, 650)) ]
 		self.center = [(380, 300), (495, 300), (610, 300), (730,300), (850, 300)]
 		self.images = []
 		self.canvasImages = [];
@@ -129,35 +129,38 @@ class Table():
 		self.updateStacks()
 		state = hand_state['state'];
 		hole_cards = hand_state['hole_cards']
-		print hole_cards
-		if state == "pre-flop":
-			for i, hole in enumerate(hole_cards):
-				self.images.append(ImageTk.PhotoImage(file = imageName[hole[0]]))
-				self.images.append(ImageTk.PhotoImage(file = imageName[hole[1]]))
-				
-				im = self.printImg(2*i, self.seats[i][0]);
-				self.canvasImages.append(im)
-				im = self.printImg(2*i+1, self.seats[i][1]);
-				self.canvasImages.append(im)
+		show_cards = hand_state['show_cards'];
+		if show_cards:
+			if state == "pre-flop":
+				print hole_cards
+				for i, hole in enumerate(hole_cards):
+					#if i==0: continue;
+					self.images.append(ImageTk.PhotoImage(file = imageName[hole[0]]))
+					self.images.append(ImageTk.PhotoImage(file = imageName[hole[1]]))
+					
+					im = self.printImg(2*i, self.seats[i][0]);
+					self.canvasImages.append(im)
+					im = self.printImg(2*i+1, self.seats[i][1]);
+					self.canvasImages.append(im)
 
-		elif state == "pre-turn":
-			flop = hand_state['flop'];
-			for i, card in enumerate(flop):
+			elif state == "pre-turn":
+				flop = hand_state['flop'];
+				for i, card in enumerate(flop):
+					self.images.append(ImageTk.PhotoImage(file = imageName[card]))
+					im = self.printImg(4+i, self.center[i])
+					self.canvasImages.append(im)
+
+			elif state == "pre-river":
+				card = hand_state['turn'];
 				self.images.append(ImageTk.PhotoImage(file = imageName[card]))
-				im = self.printImg(4+i, self.center[i])
+				im = self.printImg(7, self.center[3])
 				self.canvasImages.append(im)
 
-		elif state == "pre-river":
-			card = hand_state['turn'];
-			self.images.append(ImageTk.PhotoImage(file = imageName[card]))
-			im = self.printImg(7, self.center[3])
-			self.canvasImages.append(im)
-
-		elif state == "done":
-			card = hand_state['river'];
-			self.images.append(ImageTk.PhotoImage(file = imageName[card]))
-			im = self.printImg(8, self.center[4])
-			self.canvasImages.append(im)
+			elif state == "done":
+				card = hand_state['river'];
+				self.images.append(ImageTk.PhotoImage(file = imageName[card]))
+				im = self.printImg(8, self.center[4])
+				self.canvasImages.append(im)
 
 	def reset(self):
 		for im in self.canvasImages:
