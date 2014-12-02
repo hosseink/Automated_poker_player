@@ -7,24 +7,28 @@ import sys
 from StringIO import StringIO
 
 image_name = "/Users/Carrie/Desktop/CS221/project/scripts/poker-table.JPG"
+import os
+
+image_name = os.getcwd()+"/poker-table.JPG"
 img = Image.open(image_name);
 w, h = img.size
 #canvas.pack(expand = YES, fill = BOTH)
 card_size= (112, 156)
 
 suits = ['S', 'H', 'D', 'C'];
-ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J','Q', 'K', 'A']; # 10 is missed (should be fixed) 
-cardsList = []; 
-imageName = {}; 
-cardstoC = {}; 
+ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J','Q', 'K', 'A']; # 10 is missed (should be fixed)
+cardsList = [];
+imageName = {};
+cardstoC = {};
 cards_dirName = 'cards/'
+facedown_card = cards_dirName + 'facedown_card.JPG'
 for i, suit in enumerate(suits):
         for j, rank in enumerate(ranks):
                 card = suit + rank;
                 cardsList.append(card);
                 imageName[card] = cards_dirName+card+'.JPG'
                 cardstoC[card] = Card(j+2,i+1);
- 
+
 class Table():
 	def __init__(self, players):
 		self.players = players;
@@ -63,6 +67,11 @@ class Table():
 			self.bet2_button = Button(self.canvas, text = "Bet", command = self.bet2, anchor = W)
 			self.bet2_button.configure(width = 5, activebackground = "#33B5E5",relief = FLAT)
 			self.canvas.create_window(545, 600, anchor=NW, window=self.bet2_button)	
+=======
+		self.deal_button = Button(self.canvas, text = "Deal", command = self.deal, anchor = W)
+		self.deal_button.configure(width = 10, activebackground = "#33B5E5",relief = FLAT)
+		self.canvas.create_window(10, 10, anchor=NW, window=self.deal_button)
+>>>>>>> 5bc0db33e6e2367d54c9ed335a740dd298869569
 
 			self.check2_button = Button(self.canvas, text = "Check", command = self.check2, anchor = W)
 			self.check2_button.configure(width = 5, activebackground = "#33B5E5",relief = FLAT)
@@ -134,9 +143,12 @@ class Table():
 			if state == "pre-flop":
 				print hole_cards
 				for i, hole in enumerate(hole_cards):
-					#if i==0: continue;
-					self.images.append(ImageTk.PhotoImage(file = imageName[hole[0]]))
-					self.images.append(ImageTk.PhotoImage(file = imageName[hole[1]]))
+					if i==0:
+						self.images.append(ImageTk.PhotoImage(file = facedown_card))
+						self.images.append(ImageTk.PhotoImage(file = facedown_card))
+					else:
+						self.images.append(ImageTk.PhotoImage(file = imageName[hole[0]]))
+						self.images.append(ImageTk.PhotoImage(file = imageName[hole[1]]))
 					
 					im = self.printImg(2*i, self.seats[i][0]);
 					self.canvasImages.append(im)
@@ -154,7 +166,6 @@ class Table():
 				card = hand_state['turn'];
 				self.images.append(ImageTk.PhotoImage(file = imageName[card]))
 				im = self.printImg(7, self.center[3])
-				self.canvasImages.append(im)
 
 			elif state == "done":
 				card = hand_state['river'];
@@ -164,7 +175,7 @@ class Table():
 
 	def reset(self):
 		for im in self.canvasImages:
-			self.canvas.delete(im);	
+			self.canvas.delete(im);
 		self.images = []
 		self.canvasImages = [];
 	def deal(self):
@@ -173,13 +184,13 @@ class Table():
 		assert(self.hand!=None);
 		if self.hand.getState()=="done":
 			print "No more dealing"
-		else:	
-			self.hand.deal();	
+		else:
+			self.hand.deal();
 			if self.hand.getState() == "pre-flop":
 				for i, player in enumerate(self.hand.players):
 					self.images.append(ImageTk.PhotoImage(file = hand.deck.imageName[player.cards[0]]))
 					self.images.append(ImageTk.PhotoImage(file = hand.deck.imageName[player.cards[1]]))
-					
+
 					self.printImg(2*i, self.seats[i][0]);
 					self.printImg(2*i+1, self.seats[i][1]);
 
@@ -197,7 +208,7 @@ class Table():
 				card = self.hand.river
 				self.images.append(ImageTk.PhotoImage(file = hand.deck.imageName[card]))
 				self.printImg(8, self.center[4])
-								
+
 
 if __name__ == "__main__":
 	H = Player("Hossein", 100);
