@@ -172,6 +172,16 @@ class Table():
 				self.images.append(ImageTk.PhotoImage(file = imageName[card]))
 				im = self.printImg(8, self.center[4])
 				self.canvasImages.append(im)
+			elif state == "show_cards":
+				self.images.append(ImageTk.PhotoImage(file = imageName[hole_cards[0][0]]))
+				self.images.append(ImageTk.PhotoImage(file = imageName[hole_cards[0][1]]))
+				self.canvas.delete(self.canvasImages[0])
+				self.canvas.delete(self.canvasImages[1])
+				im = self.printImg(9, self.seats[0][0]);
+				self.canvasImages.append(im)
+				im = self.printImg(10, self.seats[0][1]);
+				self.canvasImages.append(im)
+				
 
 	def reset(self):
 		for im in self.canvasImages:

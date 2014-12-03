@@ -212,9 +212,12 @@ class Hand:
 				hole1 = [self.deck.cardstoC[c] for c in self.players[1].cards]
 				score0 = HandEvaluator.evaluate_hand(hole0, board)
 				score1 = HandEvaluator.evaluate_hand(hole1, board)
+				self.state = "show_cards";
+				self.updateTable();
 				winner = 0;
 				if score1 > score0:
 					winner = 1;
+				time.sleep(2);
 				break;
 		print self.players[winner].name + ' won the hand.\n'
 		self.players[winner].stack += self.pot;
