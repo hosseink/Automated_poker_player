@@ -2,14 +2,23 @@ import Tkinter as tk
 from Tkinter import *
 from PIL import ImageTk, Image
 from util import *
+<<<<<<< HEAD
 import tkFont
 import sys
 from StringIO import StringIO
 
 image_name = "/Users/Carrie/Desktop/CS221/project/scripts/poker-table.JPG"
+<<<<<<< HEAD
 import os
 
 image_name = os.getcwd()+"/poker-table.JPG"
+=======
+=======
+import os
+
+image_name = os.getcwd()+"/poker-table.JPG"
+>>>>>>> 5bc0db33e6e2367d54c9ed335a740dd298869569
+>>>>>>> 2e670579b66ddf9c46c4383e3448ce5055d9c987
 img = Image.open(image_name);
 w, h = img.size
 #canvas.pack(expand = YES, fill = BOTH)
@@ -60,6 +69,7 @@ class Table():
 		self.center = [(380, 300), (495, 300), (610, 300), (730,300), (850, 300)]
 		self.images = []
 		self.canvasImages = [];
+<<<<<<< HEAD
 		
 		'''if players[1].agent.fromTable:
 			#sys.stdin = StringIO();
@@ -120,6 +130,7 @@ class Table():
 	def printImg(self, im_idx, location):
 		return self.canvas.create_image(location[0],location[1] , image = self.images[im_idx], anchor = NW)
 
+<<<<<<< HEAD
 	def updateStacks(self):
 		#self.canvas.delete(self.pot);
 		#self.canvas.delete(self.potRec) 
@@ -130,6 +141,8 @@ class Table():
 		self.canvas.itemconfig(self.pot, text = str(self.potAmount))
 		self.canvas.itemconfig(self.stack1, text = str(self.stack1Amount))
 		self.canvas.itemconfig(self.stack2, text = str(self.stack2Amount))
+=======
+>>>>>>> 5bc0db33e6e2367d54c9ed335a740dd298869569
 
 	def update(self, hand_state):
 		self.potAmount = hand_state["pot"];
@@ -138,6 +151,7 @@ class Table():
 		self.updateStacks()
 		state = hand_state['state'];
 		hole_cards = hand_state['hole_cards']
+<<<<<<< HEAD
 		show_cards = hand_state['show_cards'];
 		if show_cards:
 			if state == "pre-flop":
@@ -166,6 +180,18 @@ class Table():
 				card = hand_state['turn'];
 				self.images.append(ImageTk.PhotoImage(file = imageName[card]))
 				im = self.printImg(7, self.center[3])
+=======
+		print hole_cards
+		if state == "pre-flop":
+			for i, hole in enumerate(hole_cards):
+				self.images.append(ImageTk.PhotoImage(file = imageName[hole[0]]))
+				self.images.append(ImageTk.PhotoImage(file = imageName[hole[1]]))
+
+				im = self.printImg(2*i, self.seats[i][0]);
+				self.canvasImages.append(im)
+				im = self.printImg(2*i+1, self.seats[i][1]);
+				self.canvasImages.append(im)
+>>>>>>> 2e670579b66ddf9c46c4383e3448ce5055d9c987
 
 			elif state == "done":
 				card = hand_state['river'];
