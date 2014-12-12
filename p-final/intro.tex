@@ -1,0 +1,33 @@
+\section{Introduction}\label{intro}
+Implementing an automated poker player is challenging since poker involves
+elements of uncertainty, randomness, strategic interaction, and game-theoretic
+reasoning. Heads-up poker is a form of Texas Hold'em poker that is played 
+between two players. Poker 
+has a rich story of study among game theorists, mathematicians, 
+and economists. Recently, there has been lots  of research into 
+developing strong programs for playing poker. In [1] authors introduce
+the Bayesian Poker Program (BPP), which uses a Bayesian network to model 
+poker hands and the opponent's playing behavior. In [2] an algorithm has been developed
+to compute the approximate jam/fold equilibrium strategies in tournaments 
+with three players. In a jam/fold strategy, the actions player can take is restricted to 
+either folding or going all-in. This strategy known to be 
+the near-optimal in the two player tournaments. A heads-up no-limit Texas 
+Hold'em poker player (we will define these terms later) called Tartanian, 
+has been introduced in [3]. Tartanian
+uses a discretized betting model to reduce the size of the strategy space.
+It also, benefits from a card abstraction model to decrease the problem size.
+In [4] a poker program called Poki has been developed. Poki uses reinforcement 
+learning techniques to explore and construct statistical models for each opponent,
+and exploit based on the observed patterns. 
+
+In this project, we aim to discuss implementing an 
+automated heads-up poker player. Our approach to this problem is breaking
+the problem into a sequence of simplified problems. We will describe this hierarchy
+of problem complexities in later sections.
+
+The rest of this report is organize as follows: in \S 2 we describe the
+rules of heads-up poker and the dynamics of the game. In \S 3 we will
+describe our main model for the project and 
+demonstrate the hierarchy of simplified problems and their complexity.
+\S 4 describes our implementation.
+Finally section \S 5 discusses the result.

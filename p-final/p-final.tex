@@ -1,0 +1,34 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage,graphicx,psfrag,amsmath,amsfonts,amssymb}
+\usepackage[small,bf]{caption}
+\usepackage{hyperref,graphicx}
+\usepackage{url,algorithm,amsmath,amsthm}
+\usepackage{algorithmicx,algpseudocode}
+\usepackage{subcaption}
+\input defs.tex
+\captionsetup{font=scriptsize,labelfont=scriptsize}
+
+\bibliographystyle{alpha}
+
+\title{Automated Heads-Up Poker Player}
+\author{Hossein Karkeh Abadi \and Reza Takapoui}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+In this paper we describe designing and implementing an automated 
+heads-up Texas Hold'em poker player. We use reinforcement learning
+techniques to simultaneously explore the state space and exploit the
+acquired knowledge from the opponent. We consider a Bayesian model
+for the agent and the opponent. 
+The implementation is done in
+python which consists the the user interface and the algorithm. 
+\end{abstract}
+
+\input intro.tex 
+\input rules.tex
+\input model.tex
+\input implement.tex
+\bibliography{p-progress}
+\end{document}
+

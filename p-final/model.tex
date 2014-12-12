@@ -1,0 +1,55 @@
+\section{Model}
+In this project we will implement the \emph{limited} Texas Hold'em heads-up poker. As we
+described in section 2, every hand proceeds in four states pre-flop, folp, 
+turn, and river. In the limited poker, the set of all valid actions 
+for agents is fold, check, bet two chips. In our model, for each agent
+we define two hidden random variables $F$, and $H$, which are not revealed to the
+opponent. 
+The vector $F$, is a feature vector representing the agent's properties, \ie, her 
+level of aggression, etc. and incorporates the 
+agent's way of playing in all levels. 
+$H$ is a random
+variable representing the agent's hole cards. Note that $H$ is unique for 
+each hand of the game and $F$ is unique for each agent.
+
+\subsection{How the opponent agent plays poker}
+As mentioned before, 
+the agent will consider two hidden random variables $H$ and $F$ as described above 
+for the opponent and tries to update her beliefs about them as she plays. Figure 1 shows the
+probabilistic graphical model (PGM) for each state of a 
+particular hand that the agent uses to update her 
+beliefs. In this model, $B$ represents the dealt cards so far on the board, $S$ is the 
+story of the hand so far (\ie the actions in the previous states of the hand), and 
+$A$ is the opponent's action. Note that $B$, $S$, and $A$ are all observed by the
+agent, and she should use them to update her beliefs about hidden random variable
+$H$. 
+In our model, we defined an $F\in\reals^{13}$ as the latent feature vector.
+$F_1\in[0,1]$ is the probability of making a bet based on bluff (when the agent would not
+make a bet with his strategy). The agent makes decisions based on a heuristic to find
+the probability of winning the hand, if the prior distribution on the opponent hand is
+considered uniform. 
+(The reason to use a heuristic is the significant speed up we get compared to find the
+exact probability. We will describe this heuristic in later sections.)
+$F_2$ is
+
+\subsection {How the agent plays poker}
+
+The value of $F$, will be updated whenever the opponent's hole cards revealed
+at the end of a hand. 
+
+Given the updated beliefs about $F$ and $H$, the agent computes the expectation reward, 
+$\mathbb{E}(R)$ that she can get out of this hand. If $\mathbb{E}(R) <0$, she will
+fold any bet, otherwise she chooses to call, check, or even bet if the expected value 
+is above some threshold. So, whenever the agent sees an action from the opponent, she
+updates her beliefs, and act accordingly to maximizes her reward. The agent can sometimes
+chooses to explore more, by being aggressive to get more information about the 
+opponent's hand instead of just exploiting her beliefs. 
+ 
+\begin{figure}[h!]
+  	\centering
+ 	\includegraphics[scale = .4]{fig1}
+	\caption{opponent's action PGM}
+\end{figure}
+
+We will report the increase in the expected collected reward when we move on to the more 
+complicated models.

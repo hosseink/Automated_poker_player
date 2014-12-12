@@ -1,0 +1,31 @@
+
+\section{Rules}
+We are going to build our model based on \emph{Doyle's game} which was used 
+in the 2007 Association for the Advancement of Artificial Intelligence (AAAI) 
+Computer Poker Competition. The game is played between two players that we 
+will call player A and player B. 
+
+\BIT
+\item \textbf{Blinds:} Every hand, both players start with 1000 chips. In odd hands (every other 
+hand), player A is the \emph{small blind} and contributes 1 chip to the pot, while 
+player B is the \emph{big blind} and contributes 2 chip to the pot. In even hands the 
+role of two players is reversed. 
+\item \textbf{Pre-flop:} Two players are dealt random cards (face down) which are called
+\emph{hole cards}. Then the small blind can either \emph{fold} (\ie yield all the chips in
+the pot to the other player), \emph{call} (contribute chips to the pot such that the number
+of contributed chips from two players are equal), or \emph{raise} (contributing more chips
+to the pot than the opponent). Notice that the famous \emph{all-in} action is a especial case
+of raising. The betting process goes on until one player stops raising (and folds or simply calls).
+\item \textbf{Flop:} Three community cards from the rest of the deck are shown. Starting from
+the big blind, the betting process starts over similar to pre-flop. Unlike pre-flop where the
+players are only using their hole cards to make actions, here the players are getting more
+information about the community cards.
+\item \textbf{Turn:} A fourth community card dealt face up. The betting process is similar to
+flop.
+\item \textbf{River:} A fifth (and last) community card is shown. A final round of bets takes place
+similar to flop and turn.
+\item \textbf{Show down:} In the event that none of the players fold until the end of river round,
+two players make the best combination of five cards out of seven cards (two hole cards and 
+five community cards). The player with a better combination wins the pot. In the case of
+two equally ranked hands, the pot is split.
+\EIT
